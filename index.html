@@ -40,16 +40,9 @@
             <!-- En-tête Sidebar -->
             <div class="p-6 border-b border-slate-800">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="bg-white p-1.5 rounded-lg shadow-lg">
-                        <!-- Logo BioTuteur Officiel -->
-                        <svg viewBox="0 0 100 100" class="w-7 h-7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="65" cy="35" r="5" fill="#0f172a" fill-opacity="0.15" />
-                            <circle cx="85" cy="25" r="4" fill="#0f172a" fill-opacity="0.1" />
-                            <circle cx="80" cy="50" r="5" fill="#0f172a" fill-opacity="0.15" />
-                            <circle cx="60" cy="55" r="4" fill="#0f172a" fill-opacity="0.1" />
-                            <path d="M65 35L85 25M65 35L80 50M80 50L60 55" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" />
-                            <path d="M45 15C35 15 25 25 25 40C25 50 30 55 35 60C32 65 25 70 20 70M45 15C55 15 65 25 65 40C65 55 55 70 45 85C40 95 25 95 25 85C25 75 35 75 35 65" stroke="#0f172a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                    <div class="bg-emerald-500 p-2 rounded-lg shadow-lg shadow-emerald-500/20">
+                        <!-- Retour au logo Brin d'ADN -->
+                        <i data-lucide="dna" class="w-6 h-6 text-white"></i>
                     </div>
                     <h1 class="text-xl font-bold tracking-tight">BioTuteur</h1>
                 </div>
@@ -72,7 +65,8 @@
                     </button>
                     <button onclick="setActiveTab('quiz')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white" data-tab="quiz">
                         <i data-lucide="check-circle" class="w-4 h-4"></i>
-                        <span class="text-sm font-medium">Quiz Interactif</span>
+                        <!-- Majuscule seulement au premier mot -->
+                        <span class="text-sm font-medium">Quiz interactif</span>
                     </button>
                     <button onclick="setActiveTab('aide')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white" data-tab="aide">
                         <i data-lucide="info" class="w-4 h-4"></i>
@@ -151,7 +145,8 @@
                     </div>
                     <div>
                         <p class="text-xs font-medium">Étudiant Cégep</p>
-                        <p class="text-[10px] text-slate-500">Session Hiver 2024</p>
+                        <!-- Actualisation à l'hiver 2026 -->
+                        <p class="text-[10px] text-slate-500">Session Hiver 2026</p>
                     </div>
                 </div>
             </div>
@@ -180,8 +175,9 @@
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                         Assistant Actif
                     </div>
-                    <button class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
-                        <i data-lucide="leaf" class="w-5 h-5"></i>
+                    <!-- Bulle de conversation pour l'historique -->
+                    <button title="Historique des conversations" class="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
+                        <i data-lucide="message-square" class="w-5 h-5"></i>
                     </button>
                 </div>
             </header>
@@ -266,7 +262,7 @@
                     const labels = {
                         'definition': 'Définition simple',
                         'clarification': 'Clarification concepts',
-                        'quiz': 'Quiz Interactif',
+                        'quiz': 'Quiz interactif',
                         'aide': 'Aide à l\'étude'
                     };
                     document.getElementById('current-tab-title').innerText = labels[tabId];
