@@ -13,8 +13,8 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .bg-dashed-amber {
-            background-image: linear-gradient(to right, #f59e0b 50%, transparent 50%);
+        .bg-dashed-emerald {
+            background-image: linear-gradient(to right, #10b981 50%, transparent 50%);
             background-size: 10px 100%;
             background-repeat: repeat-x;
         }
@@ -43,6 +43,13 @@
         [data-view].active {
             display: block;
         }
+
+        .qc-flag {
+            display: inline-block;
+            width: 20px;
+            height: 14px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-800 pb-20">
@@ -56,7 +63,7 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">BioTuteur</h1>
-                    <p class="text-emerald-400 text-xs font-medium uppercase tracking-widest">Transparence des données</p>
+                    <p class="text-emerald-400 text-xs font-medium uppercase tracking-widest">Transparence des données personnelles</p>
                 </div>
             </div>
             <button id="toggleView" class="flex items-center gap-2 px-6 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-bold transition-all shadow-lg active:scale-95">
@@ -72,28 +79,37 @@
         <div id="overviewView" data-view class="active fade-in">
             <section class="mb-12">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mb-4 uppercase">
-                    <i data-lucide="globe" class="w-3 h-3"></i> Infrastructure géo-distribuée
+                    <i data-lucide="globe" class="w-3 h-3"></i> Infrastructure haute performance
                 </div>
                 <h2 class="text-4xl font-black text-slate-900 mb-4 leading-tight">
                     Le parcours de votre question.
                 </h2>
                 <p class="text-slate-600 max-w-2xl text-lg leading-relaxed">
-                    BioTuteur privilégie l'hébergement au <span class="font-bold text-slate-900 underline decoration-emerald-500 decoration-2">Québec et au Canada</span> pour garantir la protection de vos données éducatives.
+                    BioTuteur utilise les services les plus performants pour garantir une réponse efficace tout en protégeant vos <span class="font-bold text-slate-900 underline decoration-emerald-500 decoration-2">données personnelles</span> au Québec.
                 </p>
             </section>
 
             <!-- Zones de Localisation -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div class="md:col-span-3 bg-emerald-50/50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-center gap-3">
-                    <div class="flex -space-x-2">
-                        <span class="text-2xl">🇨🇦</span>
-                        <span class="text-2xl">⚜️</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="bg-blue-50/50 border border-blue-200 rounded-2xl p-4 flex items-center justify-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🇺🇸</span>
                     </div>
-                    <span class="text-sm font-bold text-emerald-800 uppercase tracking-tighter">Zone de confiance : Canada et Québec (99% du flux)</span>
+                    <span class="text-sm font-bold text-blue-800 uppercase tracking-tighter">Zone de performance : États-unis (Traitement principal)</span>
                 </div>
-                <div class="bg-amber-50/50 border border-amber-200 rounded-2xl p-4 flex items-center justify-center gap-3">
-                    <span class="text-2xl">🇺🇸</span>
-                    <span class="text-sm font-bold text-amber-800 uppercase tracking-tighter">Zone de secours : Usa</span>
+                <div class="bg-emerald-50/50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <svg class="qc-flag" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="16" fill="#003399"/>
+                            <path d="M0 7H11V0H13V7H24V9H13V16H11V9H0V7Z" fill="white"/>
+                            <path d="M4.5 3.5C4.5 4.5 3.5 4.5 3.5 4.5C3.5 4.5 2.5 4.5 2.5 3.5C2.5 2.5 3.5 2.5 3.5 2.5C3.5 2.5 4.5 2.5 4.5 3.5Z" fill="white"/>
+                            <path d="M21.5 3.5C21.5 4.5 20.5 4.5 20.5 4.5C20.5 4.5 19.5 4.5 19.5 3.5C19.5 2.5 20.5 2.5 20.5 2.5C20.5 2.5 21.5 2.5 21.5 3.5Z" fill="white"/>
+                            <path d="M4.5 12.5C4.5 13.5 3.5 13.5 3.5 13.5C3.5 13.5 2.5 13.5 2.5 12.5C2.5 11.5 3.5 11.5 3.5 11.5C3.5 11.5 4.5 11.5 4.5 12.5Z" fill="white"/>
+                            <path d="M21.5 12.5C21.5 13.5 20.5 13.5 20.5 13.5C20.5 13.5 19.5 13.5 19.5 12.5C19.5 11.5 20.5 11.5 20.5 11.5C20.5 11.5 21.5 11.5 21.5 12.5Z" fill="white"/>
+                        </svg>
+                        <span class="text-2xl">🇨🇦</span>
+                    </div>
+                    <span class="text-sm font-bold text-emerald-800 uppercase tracking-tighter">Zone de souveraineté : Québec et Canada (Objectif 100%)</span>
                 </div>
             </div>
 
@@ -101,19 +117,19 @@
             <div class="relative bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100 mb-12">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
                     <!-- Étape 1 -->
-                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(0)" onmouseleave="hideDetail()">
+                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(0)">
                         <div class="mb-4 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 bg-emerald-100 text-emerald-700">
                             <i data-lucide="map-pin" class="w-3 h-3"></i> Canada (Montréal)
                         </div>
-                        <div class="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 border-2 border-slate-100 bg-white group-hover:bg-emerald-50 group-hover:border-emerald-500 shadow-md transition-all">
-                            <i data-lucide="shield-check" class="w-10 h-10 text-slate-300 transition-colors"></i>
+                        <div class="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 border-2 border-emerald-500 bg-emerald-50 shadow-md transition-all">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-emerald-600"></i>
                         </div>
                         <h3 class="text-center font-bold text-base mb-1">Authentification</h3>
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-wide">Aws cognito</p>
                     </div>
 
                     <!-- Étape 2 -->
-                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(1)" onmouseleave="hideDetail()">
+                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(1)">
                         <div class="mb-4 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 bg-emerald-100 text-emerald-700">
                             <i data-lucide="map-pin" class="w-3 h-3"></i> Canada (Montréal)
                         </div>
@@ -125,27 +141,27 @@
                     </div>
 
                     <!-- Étape 3 -->
-                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(2)" onmouseleave="hideDetail()">
-                        <div class="mb-4 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 bg-emerald-100 text-emerald-700">
-                            <i data-lucide="map-pin" class="w-3 h-3"></i> Canada / Québec
+                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(2)">
+                        <div class="mb-4 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 bg-blue-100 text-blue-700">
+                            <i data-lucide="map-pin" class="w-3 h-3"></i> États-Unis
                         </div>
-                        <div class="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 border-2 border-slate-100 bg-white shadow-md transition-all">
-                            <i data-lucide="cpu" class="w-10 h-10 text-slate-300 transition-colors"></i>
+                        <div class="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 border-2 border-slate-900 bg-slate-900 shadow-md transition-all">
+                            <i data-lucide="zap" class="w-10 h-10 text-emerald-400 transition-colors"></i>
                         </div>
-                        <h3 class="text-center font-bold text-base mb-1">IA souveraine</h3>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wide">Claude via Bedrock</p>
+                        <h3 class="text-center font-bold text-base mb-1">Service principal ia</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wide">Api anthropic</p>
                     </div>
 
                     <!-- Étape 4 -->
-                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(3)" onmouseleave="hideDetail()">
-                        <div class="mb-4 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 bg-amber-100 text-amber-700">
-                            <i data-lucide="map-pin" class="w-3 h-3"></i> États-Unis
+                    <div class="step-card flex flex-col items-center cursor-pointer" onmouseenter="showDetail(3)">
+                        <div class="mb-4 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 bg-indigo-100 text-indigo-700">
+                            <i data-lucide="map-pin" class="w-3 h-3"></i> Canada / Québec
                         </div>
-                        <div class="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 border-2 border-slate-100 bg-white shadow-md transition-all">
-                            <i data-lucide="external-link" class="w-10 h-10 text-slate-300 transition-colors"></i>
+                        <div class="w-24 h-24 rounded-3xl flex items-center justify-center mb-6 border-2 border-dashed border-indigo-300 bg-white shadow-md transition-all">
+                            <i data-lucide="cpu" class="w-10 h-10 text-indigo-300 transition-colors"></i>
                         </div>
-                        <h3 class="text-center font-bold text-base mb-1">Service de secours</h3>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wide">Api anthropic</p>
+                        <h3 class="text-center font-bold text-base mb-1">Cible de transition</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wide">Bedrock souverain</p>
                     </div>
                 </div>
 
@@ -155,7 +171,7 @@
                         <div class="bg-white w-16 h-16 rounded-full shadow-sm flex items-center justify-center mx-auto mb-4">
                             <i data-lucide="search" class="text-slate-300"></i>
                         </div>
-                        <p class="text-slate-400 font-medium">Survolez une étape pour explorer la souveraineté de vos données</p>
+                        <p class="text-slate-400 font-medium">Survolez une étape pour explorer le fonctionnement de BioTuteur</p>
                     </div>
                 </div>
             </div>
@@ -165,13 +181,13 @@
         <div id="technicalView" data-view class="fade-in">
             <section class="mb-12">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-slate-100 text-xs font-bold mb-4 uppercase">
-                    <i data-lucide="settings" class="w-3 h-3 text-emerald-400"></i> Schéma technique spécialisé
+                    <i data-lucide="settings" class="w-3 h-3 text-emerald-400"></i> Flux technique et optimisation
                 </div>
                 <h2 class="text-4xl font-black text-slate-900 mb-4 leading-tight">
                     Architecture et flux de données.
                 </h2>
                 <p class="text-slate-600 max-w-2xl text-lg leading-relaxed">
-                    Détails de l'ingestion, de la vectorisation et de l'orchestration par l'application Flask et les modèles de langage.
+                    Visualisation détaillée des processus d'ingestion et du choix des services pour une performance maximale.
                 </p>
             </section>
 
@@ -179,22 +195,19 @@
                 <div class="min-w-[900px]">
                     <!-- LIGNE SUPÉRIEURE -->
                     <div class="flex justify-between items-start mb-16">
-                        <div class="w-56 border-2 border-slate-200 rounded-2xl p-4 bg-slate-50 relative">
-                           <div class="absolute -top-4 left-4 bg-white px-2 flex items-center gap-2 border border-slate-200 rounded-full">
+                        <div class="w-56 border-2 border-emerald-500 rounded-2xl p-4 bg-emerald-50 relative">
+                           <div class="absolute -top-4 left-4 bg-white px-2 flex items-center gap-2 border border-emerald-500 rounded-full">
                               <span class="text-xs">🇨🇦</span>
-                              <span class="text-[10px] font-bold text-slate-400 uppercase">Aws cognito</span>
+                              <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-tighter">Aws cognito</span>
                            </div>
                            <div class="flex items-center gap-3 mb-2">
-                              <i data-lucide="shield-check" class="text-slate-400 w-5 h-5"></i>
-                              <span class="text-xs font-bold text-slate-700">Authentification</span>
-                           </div>
-                           <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                              <div class="h-full bg-emerald-500 w-1/2"></div>
+                              <i data-lucide="shield-check" class="text-emerald-600 w-5 h-5"></i>
+                              <span class="text-xs font-bold text-slate-700">Authentification des utilisateurs</span>
                            </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                          <div class="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold mb-4 uppercase">Livres en biologie</div>
+                          <div class="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold mb-4 uppercase">Ressources en biologie</div>
                           <i data-lucide="arrow-down" class="text-slate-300 w-4 h-4"></i>
                         </div>
 
@@ -215,7 +228,14 @@
                             </div>
                             <div class="w-56 border-2 border-slate-900 rounded-2xl p-4 bg-white relative">
                                <div class="absolute -top-4 left-4 bg-white px-2 flex items-center gap-2 border border-slate-200 rounded-full">
-                                  <span class="text-xs">⚜️</span>
+                                  <svg class="qc-flag" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="24" height="16" fill="#003399"/>
+                                    <path d="M0 7H11V0H13V7H24V9H13V16H11V9H0V7Z" fill="white"/>
+                                    <path d="M4.5 3.5C4.5 4.5 3.5 4.5 3.5 4.5C3.5 4.5 2.5 4.5 2.5 3.5C2.5 2.5 3.5 2.5 3.5 2.5C3.5 2.5 4.5 2.5 4.5 3.5Z" fill="white"/>
+                                    <path d="M21.5 3.5C21.5 4.5 20.5 4.5 20.5 4.5C20.5 4.5 19.5 4.5 19.5 3.5C19.5 2.5 20.5 2.5 20.5 2.5C20.5 2.5 21.5 2.5 21.5 3.5Z" fill="white"/>
+                                    <path d="M4.5 12.5C4.5 13.5 3.5 13.5 3.5 13.5C3.5 13.5 2.5 13.5 2.5 12.5C2.5 11.5 3.5 11.5 3.5 11.5C3.5 11.5 4.5 11.5 4.5 12.5Z" fill="white"/>
+                                    <path d="M21.5 12.5C21.5 13.5 20.5 13.5 20.5 13.5C20.5 13.5 19.5 13.5 19.5 12.5C19.5 11.5 20.5 11.5 20.5 11.5C20.5 11.5 21.5 11.5 21.5 12.5Z" fill="white"/>
+                                  </svg>
                                   <span class="text-[10px] font-bold text-slate-400 uppercase">Chroma db</span>
                                </div>
                                <div class="flex items-center gap-3">
@@ -242,20 +262,20 @@
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="arrow-right" class="text-slate-300 w-4 h-4"></i>
                                     <div class="flex-1 bg-slate-50 border border-slate-200 rounded-lg p-3 text-center">
-                                        <span class="text-[10px] font-bold">Segmentation de la requête</span>
+                                        <span class="text-[10px] font-bold">Segmentation et analyse</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="arrow-right" class="text-slate-300 w-4 h-4"></i>
                                     <div class="flex-1 bg-slate-50 border border-slate-200 rounded-lg p-3 text-center flex flex-col gap-1">
-                                        <span class="text-[10px] font-bold">Récupération de contexte</span>
-                                        <span class="text-[8px] text-slate-400">Recherche sémantique</span>
+                                        <span class="text-[10px] font-bold">Recherche sémantique</span>
+                                        <span class="text-[8px] text-slate-400">Récupération de contexte</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="arrow-right" class="text-slate-300 w-4 h-4"></i>
                                     <div class="flex-1 bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-center flex flex-col gap-1">
-                                        <span class="text-[10px] font-bold text-emerald-800 uppercase">Reclassement</span>
+                                        <span class="text-[10px] font-bold text-emerald-800 uppercase text-[9px]">Reclassement</span>
                                         <span class="text-[8px] text-emerald-600">Requête bonifiée</span>
                                     </div>
                                 </div>
@@ -266,34 +286,43 @@
                     <!-- LIGNE INFÉRIEURE -->
                     <div class="flex justify-between items-end gap-8">
                         <div class="flex-1 flex flex-col gap-4">
-                            <div class="border-2 border-slate-900 rounded-2xl p-4 bg-white flex items-center justify-between">
+                            <!-- Principal USA -->
+                            <div class="border-2 border-slate-900 rounded-2xl p-4 bg-slate-900 text-white flex items-center justify-between shadow-xl">
                                <div class="flex items-center gap-4">
-                                  <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center font-black text-slate-900 text-lg underline decoration-emerald-500">AI</div>
+                                  <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center font-black text-white text-lg">AI</div>
                                   <div>
-                                    <p class="text-[10px] font-bold uppercase">Traitement par le modèle (via bedrock)</p>
-                                    <p class="text-[9px] text-slate-400">Claude 3.5 sonnet</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-wide">Service principal de traitement</p>
+                                    <p class="text-[9px] text-emerald-400 font-bold uppercase">Api anthropic - Haute performance</p>
                                   </div>
                                </div>
-                               <div class="flex items-center gap-1 opacity-50">
-                                  <span class="text-xs">🇨🇦</span>
-                                  <span class="text-xs">⚜️</span>
-                               </div>
+                               <span class="text-xs">🇺🇸</span>
                             </div>
-                            <div class="border-2 border-slate-200 rounded-2xl p-4 bg-white flex items-center justify-between border-dashed">
+                            <!-- Transition Canada -->
+                            <div class="border-2 border-dashed border-indigo-200 rounded-2xl p-4 bg-white flex items-center justify-between">
                                <div class="flex items-center gap-4">
-                                  <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center font-black text-slate-300 text-lg">AI</div>
+                                  <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center font-black text-indigo-300 text-lg">AI</div>
                                   <div>
-                                    <p class="text-[10px] font-bold uppercase text-slate-400">Traitement par le modèle (via api)</p>
-                                    <p class="text-[9px] text-slate-300 italic">Option de secours anonymisée</p>
+                                    <p class="text-[10px] font-bold uppercase text-indigo-400">Objectif de transition complète</p>
+                                    <p class="text-[9px] text-indigo-300 italic">Aws bedrock souverain</p>
                                   </div>
                                </div>
-                               <span class="text-xs opacity-50 grayscale">🇺🇸</span>
+                               <div class="flex items-center gap-1 opacity-50 grayscale">
+                                    <svg class="qc-flag" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="24" height="16" fill="#003399"/>
+                                        <path d="M0 7H11V0H13V7H24V9H13V16H11V9H0V7Z" fill="white"/>
+                                        <path d="M4.5 3.5C4.5 4.5 3.5 4.5 3.5 4.5C3.5 4.5 2.5 4.5 2.5 3.5C2.5 2.5 3.5 2.5 3.5 2.5C3.5 2.5 4.5 2.5 4.5 3.5Z" fill="white"/>
+                                        <path d="M21.5 3.5C21.5 4.5 20.5 4.5 20.5 4.5C20.5 4.5 19.5 4.5 19.5 3.5C19.5 2.5 20.5 2.5 20.5 2.5C20.5 2.5 21.5 2.5 21.5 3.5Z" fill="white"/>
+                                        <path d="M4.5 12.5C4.5 13.5 3.5 13.5 3.5 13.5C3.5 13.5 2.5 13.5 2.5 12.5C2.5 11.5 3.5 11.5 3.5 11.5C3.5 11.5 4.5 11.5 4.5 12.5Z" fill="white"/>
+                                        <path d="M21.5 12.5C21.5 13.5 20.5 13.5 20.5 13.5C20.5 13.5 19.5 13.5 19.5 12.5C19.5 11.5 20.5 11.5 20.5 11.5C20.5 11.5 21.5 11.5 21.5 12.5Z" fill="white"/>
+                                    </svg>
+                                    <span class="text-xs">🇨🇦</span>
+                               </div>
                             </div>
                         </div>
                         <i data-lucide="arrow-right" class="text-slate-300 w-6 h-6 mb-12"></i>
                         <div class="w-56 bg-emerald-500 rounded-2xl p-6 text-white text-center shadow-lg shadow-emerald-200 relative">
                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-emerald-600 px-3 py-1 rounded-full text-[9px] font-black uppercase shadow-sm">
-                              Résultat final
+                              Réponse générée
                            </div>
                            <i data-lucide="check-circle-2" class="w-8 h-8 mx-auto mb-2"></i>
                            <p class="text-xs font-bold uppercase leading-tight">Retour à l'utilisateur de la réponse</p>
@@ -314,18 +343,18 @@
                     Engagement Québec
                 </h4>
                 <p class="text-emerald-100/80 leading-relaxed mb-6">
-                    BioTuteur s'engage à maintenir l'intégralité du traitement des données au sein de la province de Québec ou du Canada pour tous les utilisateurs réguliers, conformément à la loi 25.
+                    BioTuteur s'engage à maintenir l'intégralité du traitement des <span class="text-white font-bold underline decoration-emerald-400 decoration-2">données personnelles</span> au sein de la province de Québec ou du Canada pour tous les utilisateurs, conformément à la loi 25.
                 </p>
                 <div class="flex items-center gap-4 text-sm font-bold">
                     <span class="px-3 py-1 bg-white/10 rounded-lg border border-white/20">Loi 25</span>
-                    <span className="px-3 py-1 bg-white/10 rounded-lg border border-white/20">Pipeda</span>
+                    <span class="px-3 py-1 bg-white/10 rounded-lg border border-white/20">Pipeda</span>
                 </div>
             </div>
 
             <div class="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-center">
-                <h4 class="text-xl font-bold text-slate-900 mb-4 tracking-tight">Anonymisation systématique</h4>
+                <h4 class="text-xl font-bold text-slate-900 mb-4 tracking-tight">Efficacité et constante</h4>
                 <p class="text-slate-600 mb-6">
-                    Avant tout transit vers une zone tiers (Usa), les métadonnées personnelles sont nettoyées. Votre question est traitée comme un objet purement textuel, déconnecté de votre identité réelle.
+                    Nous utilisons actuellement les services les plus robustes aux États-Unis pour assurer une réponse stable et rapide, tout en travaillant activement à la transition vers des services d'IA complètement souverains sur le territoire canadien.
                 </p>
                 <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-500 w-full animate-pulse"></div>
@@ -364,25 +393,25 @@
                 title: 'Authentification',
                 location: 'Canada (Montréal)',
                 color: 'bg-[#1e293b]',
-                description: 'Vos identifiants et données de profil sont gérés par Aws cognito dans la région Canada central. Aucune donnée personnelle ne quitte le territoire canadien lors de la connexion.'
+                description: 'Vos identifiants et données de profil sont gérés par Aws cognito à Montréal. Aucune donnée personnelle ne quitte le territoire canadien lors de la connexion.'
             },
             {
                 title: 'Données et vecteurs',
                 location: 'Canada (Montréal)',
                 color: 'bg-[#1e293b]',
-                description: 'Les livres de biologie et les index de recherche (vecteurs) sont stockés localement à Montréal. Cela garantit une latence minimale et le respect des lois canadiennes sur la vie privée.'
+                description: 'Les livres de biologie et les index de recherche sont stockés localement. Cela garantit une latence minimale et le respect total des lois sur la vie privée.'
             },
             {
-                title: 'IA souveraine',
-                location: 'Canada / Québec',
-                color: 'bg-[#1e293b]',
-                description: 'Le traitement principal s’effectue via Aws bedrock sur des serveurs canadiens. Le modèle Claude 3.5 sonnet analyse le contexte sans que les données ne soient utilisées pour l\'entraînement.'
-            },
-            {
-                title: 'Service de secours',
+                title: 'Service principal ia',
                 location: 'États-Unis',
-                color: 'bg-amber-900',
-                description: 'Uniquement en cas d\'indisponibilité des serveurs canadiens, une requête chiffrée et anonymisée peut être traitée via l\'api sécurisée aux Usa pour garantir la continuité du service.'
+                color: 'bg-slate-900',
+                description: 'Traitement principal haute performance via l\'api d\'anthropic. Ce service assure une stabilité et une efficacité maximale pour la génération des réponses pédagogiques.'
+            },
+            {
+                title: 'Cible de transition',
+                location: 'Canada / Québec',
+                color: 'bg-indigo-900',
+                description: 'Nous visons à terme le déploiement complet de nos services d\'intelligence artificielle sur Aws bedrock au Canada pour atteindre une souveraineté de données absolue.'
             }
         ];
 
@@ -427,11 +456,6 @@
                 </div>
             `;
             lucide.createIcons();
-        }
-
-        function hideDetail() {
-            // Optionnel : on garde le dernier survolé ou on revient à l'état initial
-            // Pour l'instant on garde le contenu affiché pour une meilleure UX
         }
     </script>
 </body>
