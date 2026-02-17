@@ -434,17 +434,19 @@
         const cred = await signInWithEmailAndPassword(auth, email, password);
         const user = cred.user;
 
-        // Récupérer le rôle depuis les custom claims (ou Firestore plus tard)
-        const token = await user.getIdTokenResult();
-        const role  = token.claims.role || 'etudiant';
+        // Détection du rôle via l'email (simple, sans custom claims)
+        const email2 = user.email || '';
+        let role = 'etudiant';
+        if (email2.startsWith('admin'))   role = 'admin';
+        else if (email2.startsWith('tuteur')) role = 'tuteur';
 
         showToast(`Bienvenue ! Redirection en cours…`);
 
         // Redirection selon le rôle
         setTimeout(() => {
-          if (role === 'admin')   window.location.href = 'dashboard-admin.html';
-          else if (role === 'tuteur') window.location.href = 'dashboard-tuteur.html';
-          else                    window.location.href = 'dashboard-etudiant.html';
+          if (role === 'admin')        window.location.href = 'dashboard-admin.html';
+          else if (role === 'tuteur')  window.location.href = 'dashboard-tuteur.html';
+          else                         window.location.href = 'dashboard-etudiant.html';
         }, 1200);
 
       } catch (err) {
