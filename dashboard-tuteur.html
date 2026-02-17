@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biotuteur — Tableau de bord Enseignant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --violet:   #6C63D5;
+      --teal:     #3BBFBF;
+      --grad:     linear-gradient(135deg, #6C63D5 0%, #3BBFBF 100%);
+      --bg:       #F4F6FA;
+      --white:    #FFFFFF;
+      --border:   #E2E8F0;
+      --text:     #1A202C;
+      --muted:    #718096;
+      --light:    #EDF2F7;
+      --green:    #48BB78;
+      --blue:     #667EEA;
+      --orange:   #ED8936;
+      --red:      #FC8181;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 60px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.625rem;
+    }
+    .nav-logo-icon {
+      width: 34px; height: 34px;
+      background: var(--grad);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.9rem;
+    }
+    .nav-logo-text {
+      font-size: 1.05rem; font-weight: 700; color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-text span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    .user-chip {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--light); border-radius: 999px;
+      padding: 0.3rem 0.875rem 0.3rem 0.3rem;
+    }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: white;
+    }
+    .user-name { font-size: 0.82rem; font-weight: 500; }
+
+    .btn-logout {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.8rem; font-family: 'Inter', sans-serif;
+      padding: 0.4rem 0.875rem; border-radius: 6px; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem;
+    }
+    .btn-logout:hover { border-color: var(--violet); color: var(--violet); }
+
+    /* ── MAIN LAYOUT ── */
+    main { padding-top: 60px; }
+
+    /* ── REPORT HEADER (gradient) ── */
+    .report-header {
+      background: var(--grad);
+      padding: 2.5rem 3rem;
+      color: white;
+    }
+    .report-header-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .report-tag {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .report-title {
+      font-size: 1.65rem; font-weight: 800; letter-spacing: -0.03em;
+      margin-bottom: 0.375rem;
+    }
+    .report-subtitle { font-size: 0.9rem; opacity: 0.82; }
+
+    .report-meta {
+      text-align: right;
+    }
+    .report-meta-label { font-size: 0.72rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
+    .report-meta-value { font-size: 0.9rem; font-weight: 600; margin-top: 0.2rem; }
+
+    .btn-generate {
+      margin-top: 1.5rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: white; color: var(--violet);
+      font-size: 0.875rem; font-weight: 700; font-family: 'Inter', sans-serif;
+      border: none; border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .btn-generate:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+    .btn-generate:active { transform: scale(0.98); }
+    .btn-generate.loading { opacity: 0.7; cursor: not-allowed; }
+
+    /* ── CONTENT AREA ── */
+    .content { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s;
+    }
+    .kpi-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .kpi-label {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--teal); margin-bottom: 0.5rem;
+    }
+    .kpi-value {
+      font-size: 2.25rem; font-weight: 800; color: var(--text);
+      line-height: 1; letter-spacing: -0.04em;
+      margin-bottom: 0.3rem;
+    }
+    .kpi-sub { font-size: 0.78rem; color: var(--muted); }
+
+    /* ── SECTION HEADER BAR ── */
+    .section-header {
+      background: var(--grad);
+      border-radius: 10px 10px 0 0;
+      padding: 0.75rem 1.25rem;
+      color: white;
+      font-size: 0.92rem; font-weight: 700;
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    /* ── SECTION CARD ── */
+    .section-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: #EBF8FF;
+      border: 1px solid #BEE3F8;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem; color: #2C5282;
+      margin-bottom: 1.25rem;
+      display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .info-box i { margin-top: 0.05rem; flex-shrink: 0; }
+
+    /* ── HIGHLIGHT STAT ── */
+    .highlight-stat {
+      background: linear-gradient(135deg, rgba(108,99,213,0.08), rgba(59,191,191,0.08));
+      border: 1px solid rgba(108,99,213,0.2);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem; font-weight: 600; color: var(--violet);
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* ── HORIZONTAL BAR CHART ── */
+    .bar-chart { display: flex; flex-direction: column; gap: 0.6rem; }
+    .bar-row { display: flex; align-items: center; gap: 0.75rem; }
+    .bar-label { font-size: 0.78rem; color: var(--muted); width: 120px; flex-shrink: 0; text-align: right; }
+    .bar-track { flex: 1; background: var(--light); border-radius: 999px; height: 20px; overflow: hidden; }
+    .bar-fill {
+      height: 100%; border-radius: 999px;
+      transition: width 0.8s ease;
+    }
+    .bar-fill.green  { background: var(--green); }
+    .bar-fill.blue   { background: linear-gradient(90deg, var(--violet), var(--teal)); }
+    .bar-fill.orange { background: var(--orange); }
+    .bar-value { font-size: 0.78rem; font-weight: 700; color: var(--text); width: 28px; }
+
+    /* ── SUB SECTION TITLE ── */
+    .sub-title {
+      font-size: 0.8rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin: 1.5rem 0 0.75rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .sub-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ── AGENT METRIC CARDS ── */
+    .agent-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+    .agent-metric {
+      background: var(--light); border-radius: 8px; padding: 1rem;
+      text-align: center;
+    }
+    .agent-metric-value { font-size: 1.75rem; font-weight: 800; color: var(--violet); }
+    .agent-metric-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ── THEMES TABLE ── */
+    .themes-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .themes-table thead th {
+      background: var(--light); padding: 0.6rem 0.875rem;
+      font-weight: 700; text-align: left; color: var(--muted);
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .themes-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .themes-table thead th:last-child  { border-radius: 0 8px 0 0; }
+    .themes-table tbody tr { border-bottom: 1px solid var(--border); }
+    .themes-table tbody tr:last-child { border-bottom: none; }
+    .themes-table tbody td { padding: 0.75rem 0.875rem; vertical-align: top; }
+    .themes-table tbody td:first-child { font-weight: 600; color: var(--text); }
+    .themes-table .nb { font-weight: 700; color: var(--violet); text-align: center; }
+    .examples { color: var(--muted); font-size: 0.78rem; font-style: italic; line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    .report-footer {
+      text-align: center; padding: 1.5rem;
+      color: var(--muted); font-size: 0.78rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    /* ── MODAL PERIODE ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      z-index: 200; align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white; border-radius: 14px;
+      padding: 2rem; width: 90%; max-width: 420px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .modal h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.375rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 0.65rem 0.875rem;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.875rem; font-family: 'Inter', sans-serif; color: var(--text);
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--violet); }
+    .modal-footer { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+    .btn-cancel {
+      flex:1; padding:0.7rem; border:1px solid var(--border); background:none;
+      border-radius:8px; font-family:'Inter',sans-serif; cursor:pointer;
+      color:var(--muted); transition:all 0.2s; font-size:0.875rem;
+    }
+    .btn-cancel:hover { border-color: var(--muted); }
+    .btn-confirm {
+      flex:2; padding:0.7rem; background:var(--grad); color:white; border:none;
+      border-radius:8px; font-family:'Inter',sans-serif; font-weight:700;
+      cursor:pointer; font-size:0.875rem; transition:opacity 0.2s;
+      display:flex; align-items:center; justify-content:center; gap:0.4rem;
+    }
+    .btn-confirm:hover { opacity:0.9; }
+
+    /* Spinner */
+    .spinner { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: #1A202C; color: white;
+      padding: 0.875rem 1.25rem; border-radius: 10px;
+      font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateY(100px); transition: transform 0.3s ease;
+      z-index: 300;
+    }
+    .toast.show { transform: translateY(0); }
+    .toast i { color: var(--teal); }
+
+    @media (max-width: 680px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .report-header { padding: 1.5rem; }
+      .report-title { font-size: 1.3rem; }
+      .bar-label { width: 80px; font-size: 0.72rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><i class="fa-solid fa-dna"></i></div>
+    <span class="nav-logo-text">Bio<span>tuteur</span></span>
+  </div>
+  <div class="nav-right">
+    <div class="user-chip">
+      <div class="user-avatar" id="userAvatar">T</div>
+      <span class="user-name" id="userName">Enseignant</span>
+    </div>
+    <button class="btn-logout" id="logoutBtn">
+      <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+    </button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- REPORT HEADER -->
+  <div class="report-header">
+    <div class="report-header-top">
+      <div>
+        <div class="report-tag"><i class="fa-solid fa-graduation-cap"></i> Rapport de classe</div>
+        <h1 class="report-title">Ahuntsic_bio_cell_Collette</h1>
+        <p class="report-subtitle">Rapport d'utilisation · <span id="headerPeriode">2026-01-28 au 2026-02-11</span></p>
+      </div>
+      <div class="report-meta">
+        <div class="report-meta-label">Généré le</div>
+        <div class="report-meta-value" id="genDate">2026-02-11 à 15:38</div>
+        <div class="report-meta-label" style="margin-top:0.5rem">Groupe</div>
+        <div class="report-meta-value">Bio Cellulaire A1</div>
+      </div>
+    </div>
+    <button class="btn-generate" id="btnGenerate">
+      <i class="fa-solid fa-rotate"></i> Générer un nouveau rapport
+    </button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label"><i class="fa-solid fa-users"></i> Étudiants</div>
+        <div class="kpi-value">30</div>
+        <div class="kpi-sub">inscrits sur Biotuteur</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><i class="fa-solid fa-circle-check"></i> Utilisateurs actifs</div>
+        <div class="kpi-value">23</div>
+        <div class="kpi-sub">sur la période</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><i class="fa-solid fa-clock-rotate-left"></i> Sessions totales</div>
+        <div class="kpi-value">35</div>
+        <div class="kpi-sub">3 580,9 min en moy.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><i class="fa-solid fa-comments"></i> Conversations</div>
+        <div class="kpi-value">11</div>
+        <div class="kpi-sub">12,0 messages en moy.</div>
+      </div>
+    </div>
+
+    <!-- SECTION : ENGAGEMENT -->
+    <div class="section-header">
+      <i class="fa-solid fa-chart-line"></i> Engagement et rétention
+    </div>
+    <div class="section-card">
+
+      <div class="highlight-stat">
+        <i class="fa-solid fa-arrow-trend-up"></i>
+        26,1 % des utilisateurs sont revenus plus d'une fois
+        <span style="font-weight:400; color:var(--muted); margin-left:0.25rem">(6 sur 23 utilisateurs connectés)</span>
+      </div>
+
+      <div class="sub-title"><i class="fa-solid fa-calendar-days"></i> Distribution des jours de connexion distincts</div>
+
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">1 jour</div>
+          <div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div>
+          <div class="bar-value">17</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">2–5 jours</div>
+          <div class="bar-track"><div class="bar-fill green" style="width:35%"></div></div>
+          <div class="bar-value">6</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">6–10 jours</div>
+          <div class="bar-track"><div class="bar-fill green" style="width:0%"></div></div>
+          <div class="bar-value">0</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">10+ jours</div>
+          <div class="bar-track"><div class="bar-fill green" style="width:0%"></div></div>
+          <div class="bar-value">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION : FRÉQUENCE -->
+    <div class="section-header">
+      <i class="fa-solid fa-chart-bar"></i> Fréquence d'utilisation
+    </div>
+    <div class="section-card">
+
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        Chaque activité correspond à un chargement de page dans l'application (accès à l'accueil, ouverture d'une conversation, lancement d'un quiz, etc.).
+      </div>
+
+      <div class="sub-title"><i class="fa-solid fa-calendar-week"></i> Pages vues par jour de la semaine</div>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">Dimanche</div><div class="bar-track"><div class="bar-fill blue" style="width:22%"></div></div><div class="bar-value">11</div></div>
+        <div class="bar-row"><div class="bar-label">Lundi</div><div class="bar-track"><div class="bar-fill blue" style="width:18%"></div></div><div class="bar-value">9</div></div>
+        <div class="bar-row"><div class="bar-label">Mardi</div><div class="bar-track"><div class="bar-fill blue" style="width:0%"></div></div><div class="bar-value">0</div></div>
+        <div class="bar-row"><div class="bar-label">Mercredi</div><div class="bar-track"><div class="bar-fill blue" style="width:6%"></div></div><div class="bar-value">3</div></div>
+        <div class="bar-row"><div class="bar-label">Jeudi</div><div class="bar-track"><div class="bar-fill blue" style="width:100%"></div></div><div class="bar-value">49</div></div>
+        <div class="bar-row"><div class="bar-label">Vendredi</div><div class="bar-track"><div class="bar-fill blue" style="width:4%"></div></div><div class="bar-value">2</div></div>
+        <div class="bar-row"><div class="bar-label">Samedi</div><div class="bar-track"><div class="bar-fill blue" style="width:43%"></div></div><div class="bar-value">21</div></div>
+      </div>
+
+      <div class="sub-title"><i class="fa-solid fa-clock"></i> Pages vues par heure de la journée (heure de Montréal)</div>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">08h</div><div class="bar-track"><div class="bar-fill blue" style="width:46%"></div></div><div class="bar-value">12</div></div>
+        <div class="bar-row"><div class="bar-label">09h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">10h</div><div class="bar-track"><div class="bar-fill blue" style="width:35%"></div></div><div class="bar-value">9</div></div>
+        <div class="bar-row"><div class="bar-label">12h</div><div class="bar-track"><div class="bar-fill blue" style="width:100%"></div></div><div class="bar-value">26</div></div>
+        <div class="bar-row"><div class="bar-label">13h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">14h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">15h</div><div class="bar-track"><div class="bar-fill blue" style="width:23%"></div></div><div class="bar-value">6</div></div>
+        <div class="bar-row"><div class="bar-label">16h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">18h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">19h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">20h</div><div class="bar-track"><div class="bar-fill blue" style="width:15%"></div></div><div class="bar-value">4</div></div>
+        <div class="bar-row"><div class="bar-label">21h</div><div class="bar-track"><div class="bar-fill blue" style="width:46%"></div></div><div class="bar-value">12</div></div>
+      </div>
+
+      <div class="sub-title"><i class="fa-solid fa-calendar"></i> Sessions par semaine</div>
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        Une session représente une visite continue sur l'application (une nouvelle session est comptée après 30 minutes d'inactivité ou une nouvelle connexion).
+      </div>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">26/01 – 01/02</div><div class="bar-track"><div class="bar-fill blue" style="width:23%"></div></div><div class="bar-value">6</div></div>
+        <div class="bar-row"><div class="bar-label">02/02 – 08/02</div><div class="bar-track"><div class="bar-fill blue" style="width:100%"></div></div><div class="bar-value">26</div></div>
+        <div class="bar-row"><div class="bar-label">09/02 – 15/02</div><div class="bar-track"><div class="bar-fill blue" style="width:12%"></div></div><div class="bar-value">3</div></div>
+      </div>
+
+    </div>
+
+    <!-- SECTION : AGENT - DÉFINITION SIMPLE -->
+    <div class="section-header">
+      <i class="fa-solid fa-robot"></i> Agent — Définition simple
+    </div>
+    <div class="section-card">
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        L'agent <strong>Définition simple</strong> permet aux étudiants de poser une question et d'obtenir une réponse concise basée sur le matériel du cours.
+      </div>
+
+      <div class="agent-metrics">
+        <div class="agent-metric">
+          <div class="agent-metric-value">4</div>
+          <div class="agent-metric-label">Conversations sur la période</div>
+        </div>
+        <div class="agent-metric">
+          <div class="agent-metric-value">15,0</div>
+          <div class="agent-metric-label">Messages par conversation (moy.)</div>
+        </div>
+      </div>
+
+      <div class="sub-title"><i class="fa-solid fa-tags"></i> Thèmes abordés</div>
+      <table class="themes-table">
+        <thead>
+          <tr>
+            <th>Thème</th>
+            <th style="text-align:center">Nb questions</th>
+            <th>Exemples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Structure et propriétés des molécules organiques</td>
+            <td class="nb">9</td>
+            <td class="examples">"C'est quoi un pont H", "forces de van der waals", "pourrais-tu me définir liaison polaire"</td>
+          </tr>
+          <tr>
+            <td>Lipides et membranes cellulaires</td>
+            <td class="nb">6</td>
+            <td class="examples">"triglycéride", "phospholipide", "C'est quoi la graisse en parlant des lipides"</td>
+          </tr>
+          <tr>
+            <td>Polymères et monomères</td>
+            <td class="nb">4</td>
+            <td class="examples">"C'est quoi un Polymère", "C'est quoi un monomère", "Fais un résumé des polymères, des lipides, des protéines et des glucides"</td>
+          </tr>
+          <tr>
+            <td>Glucides et réactions chimiques</td>
+            <td class="nb">3</td>
+            <td class="examples">"c'est quoi la déshydratation", "C'est quoi la cyclisation des glucides", "Une réaction anabolique"</td>
+          </tr>
+          <tr>
+            <td>Concepts fondamentaux de biologie</td>
+            <td class="nb">2</td>
+            <td class="examples">"pourrais-tu me définir métabolisme", "pourrais-tu me définir l'adaptation"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION : AGENT - CLARIFICATION -->
+    <div class="section-header">
+      <i class="fa-solid fa-magnifying-glass"></i> Agent — Clarification de concept
+    </div>
+    <div class="section-card">
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        L'agent <strong>Clarification de concept</strong> guide l'étudiant à travers un échange interactif pour approfondir sa compréhension d'un concept de biologie.
+      </div>
+
+      <div class="agent-metrics">
+        <div class="agent-metric">
+          <div class="agent-metric-value">7</div>
+          <div class="agent-metric-label">Conversations sur la période</div>
+        </div>
+        <div class="agent-metric">
+          <div class="agent-metric-value">10,3</div>
+          <div class="agent-metric-label">Messages par conversation (moy.)</div>
+        </div>
+      </div>
+
+      <div class="sub-title"><i class="fa-solid fa-tags"></i> Thèmes abordés</div>
+      <table class="themes-table">
+        <thead>
+          <tr>
+            <th>Thème</th>
+            <th style="text-align:center">Nb questions</th>
+            <th>Exemples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Composition chimique des macromolécules</td>
+            <td class="nb">4</td>
+            <td class="examples">"Quels sont les 4 principaux atomes qui constituent les macromolécules", "Oui je comprends mais je parlais des atomes qui constituent les macromolécules"</td>
+          </tr>
+          <tr>
+            <td>Structure et propriétés des polymères et monomères</td>
+            <td class="nb">4</td>
+            <td class="examples">"C'est quoi un polymère", "C'est quoi un monomère", "Est-ce que les liaisons entre les monomères sont polaires ou non polaires ?"</td>
+          </tr>
+          <tr>
+            <td>Liaisons chimiques et interactions moléculaires</td>
+            <td class="nb">2</td>
+            <td class="examples">"Explication du pont H", "Est-ce que les liaisons entre les monomères sont polaires ou non polaires ?"</td>
+          </tr>
+          <tr>
+            <td>Métabolisme cellulaire</td>
+            <td class="nb">2</td>
+            <td class="examples">"Peux-tu me définir le métabolisme", "Une réaction anabolique"</td>
+          </tr>
+          <tr>
+            <td>Problèmes techniques et de modération</td>
+            <td class="nb">2</td>
+            <td class="examples">"Je ne comprends pas car j'ai posé la question qui ne correspond à aucun de ces thèmes"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <i class="fa-solid fa-robot" style="margin-right:0.4rem; color:var(--teal)"></i>
+      Rapport généré automatiquement par Biotuteur ·
+      <span id="footerDate"></span>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- MODAL NOUVELLE PÉRIODE -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3><i class="fa-solid fa-calendar-days" style="color:var(--violet);margin-right:0.4rem"></i>Générer un nouveau rapport</h3>
+    <div class="form-group">
+      <label>Groupe / Classe</label>
+      <input type="text" id="inputGroupe" value="Ahuntsic_bio_cell_Collette">
+    </div>
+    <div class="form-group">
+      <label>Date de début</label>
+      <input type="date" id="inputDebut" value="2026-01-28">
+    </div>
+    <div class="form-group">
+      <label>Date de fin</label>
+      <input type="date" id="inputFin" value="2026-02-11">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="modalCancel">Annuler</button>
+      <button class="btn-confirm" id="modalConfirm">
+        <i class="fa-solid fa-file-lines"></i> Générer le rapport
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg">Rapport généré avec succès !</span>
+</div>
+
+<!-- FIREBASE + SCRIPTS -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyCFxHrWSDL2eHWHAc_fSvWZdTg-Kx2Shnw",
+    authDomain:        "kiro-90012.firebaseapp.com",
+    databaseURL:       "https://kiro-90012-default-rtdb.firebaseio.com",
+    projectId:         "kiro-90012",
+    storageBucket:     "kiro-90012.firebasestorage.app",
+    messagingSenderId: "799548301552",
+    appId:             "1:799548301552:web:d906fa6ce3133d8685a235"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Vérifier auth
+  onAuthStateChanged(auth, (user) => {
+    if (!user) { window.location.href = 'index.html'; return; }
+    const email   = user.email || '';
+    const display = user.displayName || email.split('@')[0];
+    document.getElementById('userName').textContent   = display;
+    document.getElementById('userAvatar').textContent = display.charAt(0).toUpperCase();
+  });
+
+  // Déconnexion
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await signOut(auth);
+    window.location.href = 'index.html';
+  });
+
+  // Date footer
+  const now = new Date();
+  document.getElementById('footerDate').textContent =
+    now.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  // Modal
+  const overlay    = document.getElementById('modalOverlay');
+  const btnGen     = document.getElementById('btnGenerate');
+  const modalCancel= document.getElementById('modalCancel');
+  const modalConfirm = document.getElementById('modalConfirm');
+
+  btnGen.addEventListener('click', () => overlay.classList.add('show'));
+  modalCancel.addEventListener('click', () => overlay.classList.remove('show'));
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('show'); });
+
+  modalConfirm.addEventListener('click', () => {
+    const groupe = document.getElementById('inputGroupe').value;
+    const debut  = document.getElementById('inputDebut').value;
+    const fin    = document.getElementById('inputFin').value;
+
+    // Simuler génération
+    modalConfirm.innerHTML = '<i class="fa-solid fa-spinner spinner"></i> Génération…';
+    modalConfirm.style.opacity = '0.7';
+
+    setTimeout(() => {
+      // Mettre à jour l'entête
+      document.querySelector('.report-title').textContent = groupe;
+      document.getElementById('headerPeriode').textContent = `${debut} au ${fin}`;
+      document.getElementById('genDate').textContent =
+        new Date().toLocaleString('fr-CA', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+
+      // Fermer modal + toast
+      overlay.classList.remove('show');
+      modalConfirm.innerHTML = '<i class="fa-solid fa-file-lines"></i> Générer le rapport';
+      modalConfirm.style.opacity = '';
+
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = `Rapport "${groupe}" généré avec succès !`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }, 1800);
+  });
+</script>
+
+</body>
+</html>

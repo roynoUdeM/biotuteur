@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biotuteur — Tableau de bord</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #0f0f0f;
+      min-height: 100vh;
+      color: #f5f5f5;
+    }
+
+    /* Grille de fond */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,92,55,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,92,55,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: #171717;
+      border-bottom: 1px solid #262626;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #ff5c37, #c43c1e);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(255,92,55,0.3);
+    }
+
+    .nav-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f5f5f5;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-title span {
+      color: #ff5c37;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #262626;
+      border: 1px solid #333;
+      border-radius: 999px;
+      padding: 0.35rem 0.875rem 0.35rem 0.35rem;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #d4d4d4;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(255,92,55,0.12);
+      border: 1px solid rgba(255,92,55,0.25);
+      color: #ff5c37;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .btn-logout {
+      background: none;
+      border: 1px solid #333;
+      color: #737373;
+      font-size: 0.8rem;
+      font-family: 'Roboto', sans-serif;
+      padding: 0.4rem 0.875rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-logout:hover { border-color: #ff5c37; color: #ff5c37; }
+
+    /* ── MAIN ── */
+    main {
+      position: relative;
+      z-index: 1;
+      padding-top: 64px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Carte de bienvenue */
+    .welcome-card {
+      background: #171717;
+      border: 1px solid #262626;
+      border-top: 3px solid #ff5c37;
+      border-radius: 1rem;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .welcome-icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #ff5c37, #c43c1e);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 10px 25px rgba(255,92,55,0.35);
+    }
+
+    .welcome-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-title span { color: #ff5c37; }
+
+    .welcome-sub {
+      color: #737373;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* Bouton principal */
+    .btn-rapport {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      background: linear-gradient(135deg, #ff5c37, #c43c1e);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Roboto', sans-serif;
+      border: none;
+      border-radius: 0.625rem;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 6px 20px rgba(255,92,55,0.4);
+      width: 100%;
+    }
+    .btn-rapport:hover {
+      opacity: 0.92;
+      box-shadow: 0 8px 28px rgba(255,92,55,0.5);
+      transform: translateY(-1px);
+    }
+    .btn-rapport:active { transform: scale(0.98); }
+    .btn-rapport:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Stats rapides */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    .stat-card {
+      background: #0f0f0f;
+      border: 1px solid #262626;
+      border-radius: 0.625rem;
+      padding: 1rem 0.75rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ff5c37;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: #525252;
+      margin-top: 0.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Modal rapport */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+      background: #171717;
+      border: 1px solid #262626;
+      border-top: 3px solid #ff5c37;
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #525252;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0.25rem;
+    }
+    .modal-close:hover { color: #ff5c37; }
+
+    .modal-body {
+      color: #a3a3a3;
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+
+    .rapport-placeholder {
+      background: #0f0f0f;
+      border: 1px dashed #333;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .spinner { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .rapport-content { display: none; }
+    .rapport-content.show { display: block; }
+
+    .rapport-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #262626;
+      font-size: 0.85rem;
+    }
+    .rapport-line:last-child { border-bottom: none; }
+    .rapport-line-label { color: #737373; }
+    .rapport-line-value { color: #f5f5f5; font-weight: 500; }
+    .rapport-line-value.good { color: #22c55e; }
+    .rapport-line-value.warn { color: #f59e0b; }
+
+    .modal-footer {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: none;
+      border: 1px solid #333;
+      color: #a3a3a3;
+      font-size: 0.875rem;
+      font-family: 'Roboto', sans-serif;
+      padding: 0.7rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: #525252; color: #f5f5f5; }
+
+    .btn-primary {
+      flex: 2;
+      background: linear-gradient(135deg, #ff5c37, #c43c1e);
+      border: none;
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Roboto', sans-serif;
+      padding: 0.7rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    /* Tag "Bientôt disponible" */
+    .coming-soon {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.25);
+      color: #f59e0b;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <div class="nav-logo-icon"><i class="fa-solid fa-dna"></i></div>
+      <span class="nav-title">Bio<span>tuteur</span></span>
+    </div>
+    <div class="nav-right">
+      <div class="user-chip">
+        <div class="user-avatar" id="userAvatar" style="background: linear-gradient(135deg,#0ea5e9,#0369a1)">?</div>
+        <span class="user-name" id="userName">Chargement…</span>
+        <span class="role-badge" id="userRole"><i class="fa-solid fa-user-graduate"></i> Étudiant</span>
+      </div>
+      <button class="btn-logout" id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <div class="dashboard-center">
+
+      <div class="welcome-card">
+        <div class="welcome-icon">
+          <i class="fa-solid fa-dna"></i>
+        </div>
+
+        <h1 class="welcome-title">
+          Bonjour, <span id="firstName">…</span> 👋
+        </h1>
+        <p class="welcome-sub">
+          Bienvenue sur <strong style="color:#f5f5f5">Biotuteur</strong>.<br>
+          Ton tuteur IA est prêt à générer ton rapport de progression.
+        </p>
+
+        <button class="btn-rapport" id="btnRapport">
+          <i class="fa-solid fa-file-lines"></i>
+          Générer le rapport
+        </button>
+
+        <!-- Mini stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">—</div>
+            <div class="stat-label">Score moyen</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Rapports</div>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="color:#404040; font-size:0.78rem;">
+        <i class="fa-solid fa-clock" style="margin-right:0.3rem"></i>
+        Interface complète <span class="coming-soon"><i class="fa-solid fa-hammer"></i> En développement</span>
+      </p>
+
+    </div>
+  </main>
+
+  <!-- MODAL RAPPORT -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-file-lines" style="color:#ff5c37"></i>
+          Rapport de progression
+        </div>
+        <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- État : chargement -->
+        <div id="rapportLoading" class="rapport-placeholder">
+          <i class="fa-solid fa-spinner spinner" style="font-size:1.5rem; color:#ff5c37; margin-bottom:0.75rem; display:block"></i>
+          <div style="color:#525252; font-size:0.85rem">Génération du rapport en cours…</div>
+        </div>
+
+        <!-- État : contenu -->
+        <div id="rapportContent" class="rapport-content">
+          <div style="margin-bottom:1rem; padding:0.75rem; background:#0f0f0f; border-radius:0.5rem; border-left:3px solid #ff5c37;">
+            <div style="font-size:0.72rem; color:#525252; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem">Rapport généré le</div>
+            <div style="color:#f5f5f5; font-size:0.85rem" id="rapportDate">—</div>
+          </div>
+
+          <div class="rapport-line">
+            <span class="rapport-line-label">Étudiant</span>
+            <span class="rapport-line-value" id="rNom">—</span>
+          </div>
+          <div class="rapport-line">
+            <span class="rapport-line-label">Sessions complétées</span>
+            <span class="rapport-line-value warn">0 session</span>
+          </div>
+          <div class="rapport-line">
+            <span class="rapport-line-label">Score moyen</span>
+            <span class="rapport-line-value warn">Aucune donnée</span>
+          </div>
+          <div class="rapport-line">
+            <span class="rapport-line-label">Progression</span>
+            <span class="rapport-line-value good">Prêt à démarrer ✓</span>
+          </div>
+          <div class="rapport-line">
+            <span class="rapport-line-label">Statut</span>
+            <span class="rapport-line-value" style="color:#a3a3a3">En attente de données</span>
+          </div>
+
+          <div style="margin-top:1rem; padding:0.75rem; background:#0f0f0f; border-radius:0.5rem; font-size:0.82rem; color:#737373; line-height:1.6">
+            <i class="fa-solid fa-robot" style="color:#ff5c37; margin-right:0.4rem"></i>
+            <em>Le tuteur IA n'a pas encore de données de session à analyser. Commence une session pour obtenir un rapport complet.</em>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modalCancel">Fermer</button>
+        <button class="btn-primary" id="modalSave" style="display:none">
+          <i class="fa-solid fa-floppy-disk"></i> Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut }
+      from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyCFxHrWSDL2eHWHAc_fSvWZdTg-Kx2Shnw",
+      authDomain:        "kiro-90012.firebaseapp.com",
+      databaseURL:       "https://kiro-90012-default-rtdb.firebaseio.com",
+      projectId:         "kiro-90012",
+      storageBucket:     "kiro-90012.firebasestorage.app",
+      messagingSenderId: "799548301552",
+      appId:             "1:799548301552:web:d906fa6ce3133d8685a235"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Vérifier que l'utilisateur est connecté
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Pas connecté → retour login
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Remplir les infos utilisateur
+      const email     = user.email || '';
+      const display   = user.displayName || email.split('@')[0];
+      const firstName = display.split(' ')[0];
+      const initiale  = firstName.charAt(0).toUpperCase();
+
+      document.getElementById('firstName').textContent = firstName;
+      document.getElementById('userName').textContent  = display;
+      document.getElementById('userAvatar').textContent = initiale;
+      document.getElementById('rNom').textContent       = display;
+
+      // Couleur avatar selon email
+      const colors = {
+        'admin':   'linear-gradient(135deg,#7c3aed,#4c1d95)',
+        'tuteur':  'linear-gradient(135deg,#ff5c37,#c43c1e)',
+        'etudiant':'linear-gradient(135deg,#0ea5e9,#0369a1)',
+      };
+      const role = email.split('@')[0];
+      const avatar = document.getElementById('userAvatar');
+      avatar.style.background = colors[role] || colors['etudiant'];
+
+      // Badge rôle
+      const roleLabels = {
+        'admin':   '<i class="fa-solid fa-shield-halved"></i> Admin',
+        'tuteur':  '<i class="fa-solid fa-chalkboard-teacher"></i> Tuteur',
+        'etudiant':'<i class="fa-solid fa-user-graduate"></i> Étudiant',
+      };
+      document.getElementById('userRole').innerHTML = roleLabels[role] || roleLabels['etudiant'];
+    });
+
+    // Déconnexion
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'index.html';
+    });
+
+    // ── MODAL RAPPORT ──
+    const overlay    = document.getElementById('modalOverlay');
+    const btnRapport = document.getElementById('btnRapport');
+    const modalClose = document.getElementById('modalClose');
+    const modalCancel= document.getElementById('modalCancel');
+    const loading    = document.getElementById('rapportLoading');
+    const content    = document.getElementById('rapportContent');
+    const saveBtn    = document.getElementById('modalSave');
+
+    btnRapport.addEventListener('click', () => {
+      // Ouvrir modal + simuler génération
+      overlay.classList.add('show');
+      loading.style.display = 'block';
+      content.classList.remove('show');
+      saveBtn.style.display = 'none';
+
+      // Simuler délai de "génération IA"
+      setTimeout(() => {
+        loading.style.display = 'none';
+        content.classList.add('show');
+        saveBtn.style.display = 'flex';
+
+        // Date du rapport
+        const now = new Date();
+        document.getElementById('rapportDate').textContent =
+          now.toLocaleDateString('fr-CA', {
+            weekday: 'long', year: 'numeric',
+            month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          });
+      }, 1800);
+    });
+
+    const closeModal = () => overlay.classList.remove('show');
+    modalClose.addEventListener('click', closeModal);
+    modalCancel.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+    saveBtn.addEventListener('click', () => {
+      saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Sauvegardé !';
+      saveBtn.style.background = 'linear-gradient(135deg,#22c55e,#15803d)';
+      setTimeout(closeModal, 1200);
+    });
+  </script>
+
+</body>
+</html>

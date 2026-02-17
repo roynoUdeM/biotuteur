@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=dashboard-etudiant.html">
+  <title>Biotuteur — Redirection</title>
+</head>
+<body>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    const app  = initializeApp({ apiKey:"AIzaSyCFxHrWSDL2eHWHAc_fSvWZdTg-Kx2Shnw", authDomain:"kiro-90012.firebaseapp.com", projectId:"kiro-90012", appId:"1:799548301552:web:d906fa6ce3133d8685a235" });
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      if (!user) window.location.href = 'index.html';
+      else window.location.href = 'dashboard-etudiant.html';
+    });
+  </script>
+</body>
+</html>
